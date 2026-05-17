@@ -15,10 +15,11 @@ contract Animal {
     function obtenerInfo() public view returns(string memory) {
         return string.concat("Soy un ", especie);
     }
+
 }
 
 contract Perro is Animal {
-
+    
     constructor() Animal("Perro") {
 
     }
@@ -26,12 +27,13 @@ contract Perro is Animal {
     function hacerSonido() public pure override returns(string memory) {
         return "guau";
     }
+
 }
 
 contract Gato is Animal {
-
+    
     constructor() Animal("Gatito") {
-        
+
     }
 
     function hacerSonido() public pure override returns(string memory) {
@@ -41,32 +43,34 @@ contract Gato is Animal {
     function ronronear() public pure returns (string memory) {
         return "rrrrr";
     }
-    
 
 }
 
-contract PetStore{
+contract PetStore {
     Animal[] public animales;
 
-    function agregarPerro() public{
-        Perro p = new Perro();
-        animales.push(p);
+    function agregarPerro(address _direccion) public {
+        //Perro p = new Perro();
+        animales.push(Perro(_direccion));
     }
 
-    function agregarGato() public{
+    function agregarGato() public {
         Gato g = new Gato();
         animales.push(g);
     }
 
-    function getCantidadAnimales() public view returns(uint256){
+    function getCantidadAnimales() public view returns(uint) {
         return animales.length;
     }
 
-    function sonidoAnimal(uint indice) public view returns(string memory){
+    function sonidoAnimal(uint indice) public view returns(string memory) {
         return animales[indice].hacerSonido();
     }
 
-    function infoAnimal(uint indice) public view returns(string memory){
+    function infoAnimal(uint indice) public view returns(string memory) {
         return animales[indice].obtenerInfo();
     }
+
+
+
 }
