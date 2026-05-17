@@ -11,10 +11,20 @@ contract Universidad000253019 {
         uint256 edad;
     }
 
-    // Arreglo público para almacenar los registros
     Estudiante[] public estudiantes;
+    address public dirContrato;
 
     constructor() {
         console.log("Ejecutado por: 000253019 - Marco Armando Zapata Sotomayor");
+        dirContrato = address(this);
+    }
+
+    function agregarElemento(uint256 _id, string memory _nombre, uint256 _edad) public {
+        estudiantes.push(Estudiante(_id, _nombre, _edad));
+    }
+
+    function contarElementos() public view returns (uint256) {
+        console.log("Ejecutado por: 000253019 - Marco Armando Zapata Sotomayor");
+        return estudiantes.length;
     }
 }
