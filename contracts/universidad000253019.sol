@@ -12,7 +12,13 @@ contract Universidad000253019 {
         bool estado;
     }
 
-    Estudiante[] public estudiantes;
+
+    mapping(uint256 => Estudiante) public estudiantes;
+    
+
+    uint256[] private listaIds;
+    
+    uint256 public cantidad;
     address public dirContrato;
 
     modifier registrarEjecutor() {
@@ -25,36 +31,39 @@ contract Universidad000253019 {
     }
 
     function agregarElemento(uint256 _id, string memory _nombre, uint256 _edad) public registrarEjecutor {
-        for (uint256 i = 0; i < estudiantes.length; i++) {
-            require(estudiantes[i].id != _id, "El ID ya existe");
-        }
+        require(_id > 0, "El ID debe ser mayor a 0");
+        require(estudiantes[_id].id == 0, "El ID ya existe");
         require(_edad > 0, "La edad debe ser mayor a 0");
 
-        estudiantes.push(Estudiante(_id, _nombre, _edad, true));
+        estudiantes[_id] = Estudiante(_id, _nombre, _edad, true);
+        listaIds.push(_id);
+        cantidad++; // Incremento solicitado
     }
 
     function contarElementos() public view registrarEjecutor returns (uint256) {
-        return estudiantes.length;
+        return cantidad;
     }
 
-  
-    function inactivarElemento(uint256 _posicion) public registrarEjecutor {
-        require(_posicion < estudiantes.length, "Posicion fuera de rango");
-        estudiantes[_posicion].estado = false;
+
+    function inactivarElemento(uint256 _id) public registrarEjecutor {
+        require(estudiantes[_id].id != 0, "El estudiante no existe");
+        estudiantes[_id].estado = false;
     }
 
     function pintarElementosActivos() public view registrarEjecutor {
-        for (uint256 i = 0; i < estudiantes.length; i++) {
-            if (estudiantes[i].estado) {
-                console.log("Estudiante activo:", estudiantes[i].id, estudiantes[i].nombre);
+        for (uint256 i = 0; i < listaIds.length; i++) {
+            uint256 currentId = listaIds[i];
+            if (estudiantes[currentId].estado) {
+                console.log("Estudiante activo:", estudiantes[currentId].id, estudiantes[currentId].nombre);
             }
         }
     }
 
     function pintarElementosImpares() public view registrarEjecutor {
-        for (uint256 i = 0; i < estudiantes.length; i++) {
-            if (estudiantes[i].id % 2 != 0) {
-                console.log("Estudiante ID impar:", estudiantes[i].id, estudiantes[i].nombre);
+        for (uint256 i = 0; i < listaIds.length; i++) {
+            uint256 currentId = listaIds[i];
+            if (estudiantes[currentId].id % 2 != 0) {
+                console.log("Estudiante ID impar:", estudiantes[currentId].id, estudiantes[currentId].nombre);
             }
         }
     }
